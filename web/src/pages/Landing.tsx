@@ -1,5 +1,6 @@
 import React from 'react';
 
+import LoginDialog from '../components/loginButton';
 import loginImage from '../images/loginImage.png';
 import '../styles/partials/landing.css';
 
@@ -22,7 +23,7 @@ function Landing () {
                 <div className="textWrapper">
                     <h2>RESERVATECH</h2>
                     <p>Estamos aqui para facilitar a reserva dos equipamentos</p>
-                    <button>Entrar</button>
+                    <LoginDialog/>
                 </div>
             </div>
             
