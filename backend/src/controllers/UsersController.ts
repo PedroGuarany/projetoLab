@@ -1,5 +1,5 @@
 import { Request, Response} from 'express'
-import { getRepository } from 'typeorm';
+import { getRepository, getConnection } from 'typeorm';
 import User from '../models/User'
 
 export default {
@@ -24,5 +24,21 @@ export default {
         await userRepository.save(user);
 
         return response.status(201).json(user);
+    },
+
+    async login(request: Request, response: Response){
+        const { acess_code } = request.body;
+
+        const user = await getRepository(User)
+        .createQueryBuilder("user")
+        .where("user.acess_code = :acess_code", {acess_code : acess_code})
+        .getOne();    
+
+        if (user != null){
+            response.status(201).json(`Seja bem vindo ${user.name}!`);
+        }
+        else{
+            response.status(402).json(`Usuário não encontrado, tente novamente :(`);
+        }
     }
 };
