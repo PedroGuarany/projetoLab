@@ -26,7 +26,7 @@ function LoginDialog() {
     }
 
     async function logIn(e:React.ChangeEvent<any>) {
-        api.post('/login', password);
+        await api.post('login', { "acess_code" : '1234'});
     }
 
     return (
