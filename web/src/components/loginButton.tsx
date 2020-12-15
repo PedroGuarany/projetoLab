@@ -4,10 +4,13 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import api from '../services/api';
+
 
 function LoginDialog() {
+    var password = '';
+
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -16,6 +19,14 @@ function LoginDialog() {
 
     const handleClose = () => {
         setOpen(false);
+    }
+
+    const handleInputChange = (e: React.ChangeEvent<any>) => {
+        password = e.target.value;
+    }
+
+    async function logIn(e:React.ChangeEvent<any>) {
+        api.post('/login', password);
     }
 
     return (
@@ -32,10 +43,11 @@ function LoginDialog() {
                         id='password'
                         label='Senha'
                         type='password'
+                        onChange={handleInputChange}
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button> Entrar</Button>
+                    <Button onClick={logIn}> Entrar</Button>
                 </DialogActions>
             </Dialog>
         </div>

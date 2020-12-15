@@ -4,7 +4,10 @@ import LoginDialog from '../components/loginButton';
 import loginImage from '../images/loginImage.png';
 import '../styles/partials/landing.css';
 
+
+
 function Landing () {
+
     return (
         <div id='pageLanding'>
             <div className="topBar">
