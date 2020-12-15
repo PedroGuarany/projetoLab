@@ -36,11 +36,9 @@ export default {
 
         if (user != null){
             response.status(201).json(`Seja bem vindo ${user.name}!`);
-            console.log(`Seja bem vindo ${user.name}!`);
         }
         else{
             response.status(402).json(`Usuário não encontrado, tente novamente :(`);
-            console.log('vish');
         }
     }
 };
