@@ -10,6 +10,7 @@ routes.post('/equipments', EquipmentsController.create);
 
 routes.get('/users', UsersController.index);
 routes.post('/users', UsersController.create);
+
 routes.post('/login', UsersController.login);
 
 export default routes;

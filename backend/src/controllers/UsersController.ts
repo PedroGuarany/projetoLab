@@ -13,9 +13,9 @@ export default {
 
     async create(request: Request, response: Response){
         const {name, acess_code} = request.body;
-    
+        
         const userRepository = getRepository(User);
-    
+
         const user = userRepository.create({
            name,
            acess_code,
@@ -27,14 +27,15 @@ export default {
     },
 
     async login(request: Request, response: Response){
-        const { acess_code } = request.body;
+        const { name, acess_code } = request.body;
 
         const user = await getRepository(User)
         .createQueryBuilder("user")
-        .where("user.acess_code = :acess_code", {acess_code : acess_code})
+        .where("user.name = :name", { name: name })
+        .andWhere("user.acess_code = :acess_code", {acess_code : acess_code})
         .getOne();    
 
-        if (user != null){
+        if (user !== undefined){
             response.status(201).json(`Seja bem vindo ${user.name}!`);
         }
         else{
