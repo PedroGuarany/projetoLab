@@ -17,8 +17,9 @@ export default {
     },
 
     async create(request: Request, response: Response){
-        const {name, acess_code} = request.body;
-        
+        const name = (request.body.name).toLowerCase();
+
+        const acess_code = getRandomIntInclusive();
         const userRepository = getRepository(User);
 
         const user = userRepository.create({
@@ -36,7 +37,7 @@ export default {
 
         const user = await getRepository(User)
         .createQueryBuilder("user")
-        .where("user.name = :name", { name: name })
+        .where("user.name = :name", { name: (name) })
         .andWhere("user.acess_code = :acess_code", {acess_code : acess_code})
         .getOne();    
 
@@ -45,10 +46,10 @@ export default {
             const token = jwt.sign({ id }, `${process.env.SECRET}`, {
                 expiresIn: 300 // expires in 5min
             });
-            return response.json({ auth: true, token: token });
+            return response.status(201).json({ auth: true, token: token });
         }
         else{
-            response.status(402).json(`Usuário ou senha incorretos, tente novamente.`);
+            response.status(402).json({auth: false, token:null});
         }
     }
 };
@@ -61,4 +62,10 @@ function verifyJWT(request: Request, response: Response){
     jwt.verify(token, process.env.SECRET, function(err, decoded) {
       if (err) return response.status(500).json({ auth: false, message: 'Failed to authenticate.' })
     });
+}
+
+function getRandomIntInclusive(){
+    let min = Math.ceil(1000);
+    let max = Math.floor(9999); 
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }

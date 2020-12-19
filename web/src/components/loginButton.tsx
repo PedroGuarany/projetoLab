@@ -1,16 +1,23 @@
 import React from 'react';
+import api from '../services/api';
+import { useHistory } from 'react-router-dom';
+
+
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import api from '../services/api';
 
 
 function LoginDialog() {
-    var user = '';
-    var password = '';
+    var data = {
+        name: '',
+        acess_code: 0
+    }
+
+    const history = useHistory();
 
     const [open, setOpen] = React.useState(false);
 
@@ -23,20 +30,23 @@ function LoginDialog() {
     }
 
     const handleUsernameInputChange = (e: React.ChangeEvent<any>) => {
-        user = e.target.value;
+        data.name = (e.target.value).toLowerCase();
     }
 
     const handlePasswordInputChange = (e: React.ChangeEvent<any>) => {
-        password = e.target.value;
+        data.acess_code = parseInt(e.target.value);
     }
 
     async function logIn() {
-        const data = {
-            name: user,
-            acess_code: password,
+        try {
+            const response = await api.post('login', data);
+            const {auth, token} = response.data;
+            localStorage.token = token;
+            history.push('/reserve');
+        } catch(e) {
+            return false;
         }
-        const response = await api.post('login', data);
-        console.log(response)
+        
     }
 
     return (
