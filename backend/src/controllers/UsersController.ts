@@ -2,8 +2,13 @@ import { Request, Response} from 'express'
 import { getRepository, getConnection } from 'typeorm';
 import User from '../models/User'
 
+require("dotenv-safe").config();
+import jwt from 'jsonwebtoken';
+
 export default {
     async index(request: Request, response: Response){
+        verifyJWT(request, response);
+
         const userRepository = getRepository(User);
 
         const users = await userRepository.find();
@@ -36,10 +41,24 @@ export default {
         .getOne();    
 
         if (user !== undefined){
-            response.status(201).json(`Seja bem vindo ${user.name}!`);
+            const id  = user.id;
+            const token = jwt.sign({ id }, `${process.env.SECRET}`, {
+                expiresIn: 300 // expires in 5min
+            });
+            return response.json({ auth: true, token: token });
         }
         else{
-            response.status(402).json(`Usuário não encontrado, tente novamente :(`);
+            response.status(402).json(`Usuário ou senha incorretos, tente novamente.`);
         }
     }
 };
+
+// funcao do luiztools
+function verifyJWT(request: Request, response: Response){
+    const token = request.headers['x-access-token'];
+    if (!token) return response.status(401).json({ auth: false, message: 'No token.' });
+    
+    jwt.verify(token, process.env.SECRET, function(err, decoded) {
+      if (err) return response.status(500).json({ auth: false, message: 'Failed to authenticate.' })
+    });
+}
