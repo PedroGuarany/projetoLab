@@ -1,0 +1,13 @@
+#equipamentReserve {
+    height: 100vh;
+    width: 100vw;
+}
+
+#equipamentReserve .table{
+    height: auto;
+    width: 80%;
+    margin-top: 20px;
+    background-color: aquamarine;
+
+    display: grid;
+}

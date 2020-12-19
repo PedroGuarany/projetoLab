@@ -9,6 +9,7 @@ import api from '../services/api';
 
 
 function LoginDialog() {
+    var user = '';
     var password = '';
 
     const [open, setOpen] = React.useState(false);
@@ -21,12 +22,21 @@ function LoginDialog() {
         setOpen(false);
     }
 
-    const handleInputChange = (e: React.ChangeEvent<any>) => {
+    const handleUsernameInputChange = (e: React.ChangeEvent<any>) => {
+        user = e.target.value;
+    }
+
+    const handlePasswordInputChange = (e: React.ChangeEvent<any>) => {
         password = e.target.value;
     }
 
-    async function logIn(e:React.ChangeEvent<any>) {
-        await api.post('login', { "acess_code" : password});
+    async function logIn() {
+        const data = {
+            name: user,
+            acess_code: password,
+        }
+        const response = await api.post('login', data);
+        console.log(response)
     }
 
     return (
@@ -35,15 +45,22 @@ function LoginDialog() {
                 Entrar
             </Button>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="from-dialog-title"> Digite a senha de acesso</DialogTitle>
+                <DialogTitle id="from-dialog-title"> Digite o usuário e a senha</DialogTitle>
                 <DialogContent>
                     <TextField
                         autoFocus
                         margin='dense'
+                        id='user'
+                        label='Usuário'
+                        type='text'
+                        onChange={handleUsernameInputChange}
+                    />
+                    <TextField
+                        margin='dense'
                         id='password'
                         label='Senha'
                         type='password'
-                        onChange={handleInputChange}
+                        onChange={handlePasswordInputChange}
                     />
                 </DialogContent>
                 <DialogActions>
@@ -54,4 +71,4 @@ function LoginDialog() {
     )
 }
 
-export default LoginDialog
+export default LoginDialog;

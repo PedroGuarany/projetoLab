@@ -1,7 +1,7 @@
 import React from 'react';
 
 import LoginDialog from '../components/loginButton';
-import loginImage from '../images/loginImage.png';
+import logo from '../images/logo.png';
 import '../styles/partials/landing.css';
 
 
@@ -10,7 +10,7 @@ function Landing () {
 
     return (
         <div id='pageLanding'>
-            <div className="topBar">
+            <div id="topBar">
                 <a href="/duvidas">
                     DÚVIDAS
                 </a>
@@ -21,7 +21,7 @@ function Landing () {
             </div>
 
             <div className="loginDiv">
-                <img src={loginImage} alt=""/>
+                <img src={logo} alt=""/>
 
                 <div className="textWrapper">
                     <h2>RESERVATECH</h2>

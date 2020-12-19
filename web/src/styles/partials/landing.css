@@ -1,3 +1,8 @@
+#pageLanding {
+    width: 100vw;
+    height: 100vh;
+}
+
 .loginDiv {
     display: flex;
     justify-content: space-evenly;
@@ -41,4 +46,8 @@
     border-radius: 11px;
     background: #4A6FA5;
     color: white;
+}
+
+.MuiDialogContent-root {
+    display: inline-grid;
 }
