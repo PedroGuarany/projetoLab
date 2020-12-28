@@ -1,4 +1,4 @@
-import { Request, Response} from 'express'
+import { NextFunction, Request, Response} from 'express'
 import { getRepository, getConnection } from 'typeorm';
 import User from '../models/User'
 
@@ -7,7 +7,6 @@ import jwt from 'jsonwebtoken';
 
 export default {
     async index(request: Request, response: Response){
-        verifyJWT(request, response);
 
         const userRepository = getRepository(User);
 
@@ -51,18 +50,21 @@ export default {
         else{
             response.status(402).json({auth: false, token:null});
         }
+    },
+
+    verifyJWT(request: Request, response: Response, next: NextFunction){
+        const token = request.headers['authorization'];
+        if (!token) return response.status(401).json({ auth: false, message: 'No token.' });
+        
+        jwt.verify(token, `${process.env.SECRET}`, function(err, decoded) {
+          if (err) return response.status(500).json({ auth: false, message: 'Failed to authenticate.' })
+        });
+        next()
     }
 };
 
 // funcao do luiztools
-function verifyJWT(request: Request, response: Response){
-    const token = request.headers['x-access-token'];
-    if (!token) return response.status(401).json({ auth: false, message: 'No token.' });
-    
-    jwt.verify(token, process.env.SECRET, function(err, decoded) {
-      if (err) return response.status(500).json({ auth: false, message: 'Failed to authenticate.' })
-    });
-}
+
 
 function getRandomIntInclusive(){
     let min = Math.ceil(1000);

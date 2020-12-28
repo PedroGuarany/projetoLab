@@ -41,7 +41,9 @@ function LoginDialog() {
         try {
             const response = await api.post('login', data);
             const {auth, token} = response.data;
-            localStorage.token = token;
+            localStorage.setItem('token', token);
+            localStorage.setItem('auth', auth);
+            api.defaults.headers.Authorization = `Bearer ${token}`;
             history.push('/reserve');
         } catch(e) {
             return false;
